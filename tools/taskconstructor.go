@@ -1,4 +1,4 @@
-package main
+package tools
 
 import (
 	"fmt"
@@ -30,7 +30,7 @@ func (t Task) Start(task func(), runAsync bool) {
 	go func() {
 		defer func() {
 			t.close()
-			fmt.Println("Scheduler stopped!!")
+			fmt.Println("Task stopped!")
 		}()
 		firstExec := true
 		for {
@@ -68,23 +68,7 @@ func (t *Task) Close() error {
 	}()
 	return nil
 }
+
 func (t *Task) close() {
 	t.ticker.Stop()
-}
-
-func timeStampMillis() int {
-	return int(time.Now().UnixNano() / 1000000)
-}
-
-func main() {
-
-	totalCount := 0
-
-	go NewTask(10*time.Second, 2*time.Second).Start(func() {
-		totalCount++
-		fmt.Printf("%d.%4stime is %d\n", totalCount, " ", timeStampMillis())
-	}, true)
-
-	time.Sleep(time.Minute)
-
 }
